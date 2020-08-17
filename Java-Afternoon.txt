@@ -1,0 +1,426 @@
+1) Create a functional interface and use - lambda, static method, instance method and contructor references to instantiate it.
+import java.io.*;
+import java.util.*;
+public class Main
+{
+    public static void main(String[] args) throws IOException
+    {
+        int a = 2; 
+  
+        // lambda expression to define the calculate method 
+        Square s = (int x)->x*x; 
+        int ans = s.calculate(a); 
+        System.out.println(ans); 
+
+        // using static method
+        Square sq = Main:: getSquare;
+        System.out.println(sq.calculate(a));
+
+        // using instance method
+        Main obj=new Main("Instantiating using instance method");
+        Square sq1= obj::square;
+        System.out.println(sq1.calculate(a));
+
+        // using Constructor
+        Print p=Main::new;
+        p.display("Instantiated Functional Interface using Constructor reference");
+
+    }
+    public static int getSquare(int n)
+    {
+        return n*n;
+    }
+    public int square(int n)
+    {
+        return n*n;
+    }
+    public Main(String s)
+    {
+        System.out.println(s);
+    }
+}
+
+@FunctionalInterface
+interface Square{
+    int calculate(int x);
+}
+
+@FunctionalInterface
+interface Print{
+    void display(String s);
+}
+
+
+2) Demonstrate that local variable used in lamda expression must be final or effectively final and instance variable can be changed inside the lambda expression.
+
+public class TestLambda 
+{ 
+    public static void main(String args[]) 
+    { 
+      	String myMessage = "Your marks: ";
+        Sum sum = (int x, int y)->{
+          x = x+y;		
+          System.out.println(myMessage+x);
+        } ;
+      	
+      	sum.abstractFun(2,4); 
+    } 
+} 
+interface Sum
+{ 
+    void abstractFun(int a, int b); 
+  
+} 
+  
+
+
+
+
+3) Create a Product class having properties like name,category, price .Create a ProductFactory class which gives you the List of products when you pass the number of Products.
+   Now use stream Api -
+	1) To get the list of products whose price range is between x and y.(You can assume x and y yourself)
+	2) To get the total categories in the product list.
+	3) To get the maximum and minimum priced product in each category.
+
+import java.io.*;
+import java.util.*;
+import java.util.stream.Collectors;
+public class Main
+{
+    public static void main(String[] args) throws IOException
+    {
+        ProductFactory productFactory=new ProductFactory();
+        List<Product> products=productFactory.getListOfProducts(25);
+        int x=500;
+        int y=900;
+
+      
+        List<Product> productsFiltered =products.stream().filter(product->product.getPrice()>=x && product.getPrice()<=y).collect(Collectors.toList());
+        System.out.println("Filtered products :");
+        productsFiltered.forEach(product->System.out.println(product.getName()));
+
+       
+        Set<Integer> categories=products.stream().map(Product::getCategory).collect(Collectors.toSet());
+        int totalCategories=categories.size();
+        System.out.println("Total no. of categories = "+totalCategories);
+
+        for(Integer i: categories)
+        {
+            int max,min;
+            max=products.stream().filter(product->product.getCategory()==i).map(Product::getPrice).max(Comparator.comparing(Integer::valueOf)).get();
+            min=products.stream().filter(product->product.getCategory()==i).map(Product::getPrice).min(Comparator.comparing(Integer::valueOf)).get();
+            System.out.println("Max price in category "+i+" = "+max);
+            System.out.println("Min price in category "+i+" = "+min);
+
+        }
+    }
+
+}
+class ProductFactory {
+
+    public List<Product> getListOfProducts(int numOfProducts) {
+        List<Product> products = new ArrayList<>();
+        for (int i = 1; i <= numOfProducts; i++) {
+            products.add(createProduct(i));
+        }
+        return products;
+    }
+
+    private Product createProduct(int i) {
+        Product product = new Product();
+        product.setName("Product " + i);
+        product.setCategory((int) (Math.random() * (10-1+1) + 1));
+        product.setPrice((int) (Math.random() * (1000 - 100 + 1) + 100));
+        return product;
+
+    }
+
+
+}
+
+
+class Product {
+    private String name;
+    private Integer category;
+    private Integer price;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getCategory() {
+        return category;
+    }
+
+    public void setCategory(Integer category) {
+        this.category=category;
+    }
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price=price;
+    }
+}
+
+5) Establish a jdbc connection to a database and print first 10 rows of the table.
+import java.io.*;
+import java.util.*;
+import java.sql.*;
+
+public class Main {
+
+    // JDBC driver name and database URL
+    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+    static final String DB_URL = "jdbc:mysql://localhost/TEST";
+
+    //  Database credentials
+    static final String USER = "root";
+    static final String PASS = "Password";
+
+    public static void main(String[] args) {
+        Connection conn = null;
+        Statement stmt = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            System.out.println("Connected");
+            System.out.println("Creating statement...");
+            stmt = conn.createStatement();
+            String sqlQuery = "SELECT * FROM STUDENT LIMIT 10";
+            ResultSet resultSet = stmt.executeQuery(sqlQuery);
+
+            while(resultSet.next()){
+                //Retrieve by column name
+                int id  = resultSet.getInt("ID");
+                String name = resultSet.getString("NAME");
+                Double salary = resultSet.getDouble("SALARY");
+                boolean IsFresher= resultSet.getBoolean("IsFRESHER");
+
+                System.out.print("Id: " + id);
+                System.out.print(" | Name: " + name);
+                System.out.print(" | Salary: " + salary);
+                System.out.println(" | Is Fresher: " + IsFresher);
+            }
+            resultSet.close();
+            stmt.close();
+            conn.close();
+        }
+        catch(SQLException | ClassNotFoundException exc){
+            exc.printStackTrace();
+        }
+        finally {
+            try{
+                if(stmt != null){
+                    stmt.close();
+                }
+                if(conn != null){
+                    conn.close();
+                }
+            }
+            catch(SQLException sqexc){
+                sqexc.printStackTrace();
+            }
+            System.out.println("Read Successful");
+            System.out.println("Connection Closed");
+        }
+    }
+}
+
+
+6) Create a dummy xml and parse and print its data using java program.
+import java.io.*;
+import java.util.*;
+import org.w3c.dom.*;
+
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.*;
+public class Main
+{
+    public static void main(String[] args) throws ParserConfigurationException, SAXException,IOException
+    {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        
+        Document document = builder.parse(new File("employees.xml")); 
+        document.getDocumentElement().normalize();
+        Element root = document.getDocumentElement();
+        System.out.println(root.getNodeName());
+        NodeList nList = document.getElementsByTagName("employee");
+        System.out.println("============================");
+        
+        for (int temp = 0; temp < nList.getLength(); temp++)
+        {
+        Node node = nList.item(temp);
+        System.out.println("");
+        if (node.getNodeType() == Node.ELEMENT_NODE)
+        {
+            Element eElement = (Element) node;
+            System.out.println("Employee id : "    + eElement.getAttribute("id"));
+            System.out.println("First Name : "  + eElement.getElementsByTagName("firstName").item(0).getTextContent());
+            System.out.println("Last Name : "   + eElement.getElementsByTagName("lastName").item(0).getTextContent());
+            System.out.println("Location : "    + eElement.getElementsByTagName("location").item(0).getTextContent());
+ 		}
+	}
+    }
+}
+
+
+
+
+7) WAP to list all files from a directory recursively with Java.
+import java.io.*;
+import java.util.*;
+public class Main
+{        
+      public static void main(String[] args) throws IOException
+    { 
+      
+        String maindirpath = "C:\\abhi\\Desktop\\file";  
+        File maindir = new File(maindirpath);            
+        if(maindir.exists() && maindir.isDirectory()) 
+        {  
+            File arr[] = maindir.listFiles(); 
+              
+            listAllFiles(arr,0,0);  
+       }  
+    } 
+ 
+
+    
+    static void listAllFiles(File[] arr,int index,int level)  
+     { 
+         // terminate condition 
+         if(index == arr.length) 
+             return; 
+           
+         // tabs for internal levels 
+         for (int i = 0; i < level; i++) 
+             System.out.print("\t"); 
+           
+         // for files 
+         if(arr[index].isFile()) 
+             System.out.println(arr[index].getName()); 
+           
+         // for sub-directories 
+         else if(arr[index].isDirectory()) 
+         { 
+             System.out.println("[" + arr[index].getName() + "]"); 
+               
+             // recursion for sub-directories 
+             listAllFiles(arr[index].listFiles(), 0, level + 1); 
+         } 
+            
+         // recursion for main directory 
+         listAllFiles(arr,++index, level); 
+    } 
+}
+
+
+8) WAP to list out all files that are end with “.txt” extension in a folder, and then delete it.
+import java.io.*;
+import java.util.*;
+public class Main
+{
+    public static void main(String[] args) throws IOException
+    {
+        String folderName="C:\\Desktop\\File"; 
+        File folder =new File(folderName);
+        File[] txtfiles=folder.listFiles(new FilenameFilter() { 
+            public boolean accept(File dir, String filename)
+                 { return filename.endsWith(".txt"); }});
+        for(File file:txtfiles)
+        {
+            if(file.delete())
+                System.out.println("Deleted the file: " + file.getName());
+            else 
+                System.out.println("Failed to delete the file.");
+        
+        }
+    }
+}
+
+
+
+9) WAP to copy one file into another
+import java.io.*;
+import java.util.*;
+public class Main
+{
+    public static void main(String[] args) throws IOException
+    {
+        FileInputStream instream = null;
+	    FileOutputStream outstream = null;
+ 
+    	try{
+    	    File infile =new File("MyInputFile.txt");
+    	    File outfile =new File("MyOutputFile.txt");
+ 
+    	    instream = new FileInputStream(infile);
+    	    outstream = new FileOutputStream(outfile);
+ 
+    	    byte[] buffer = new byte[1024];
+ 
+    	    int length;
+    	    
+    	    while ((length = instream.read(buffer)) > 0){
+    	    	outstream.write(buffer, 0, length);
+    	    }
+
+    	    instream.close();
+    	    outstream.close();
+
+    	    System.out.println("File copied successfully!!");
+ 
+    	}catch(IOException ioe){
+    		ioe.printStackTrace();
+    	 }
+    }
+}
+
+
+
+
+10)WAP to copy a file from one dir to another dir..
+import java.io.*;
+import java.util.*;
+
+
+public class Main
+{
+    public static void main(String[] args) throws IOException
+    {
+        File from = new File("MyInputFile.txt");
+        File to = new File("C:\\abhi\\Desktop\\File\\File.txt");
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(from);
+            os = new FileOutputStream(to);
+
+            // buffer size 1K
+            byte[] buf = new byte[1024];
+
+            int bytesRead;
+            while ((bytesRead = is.read(buf)) > 0) {
+                os.write(buf, 0, bytesRead);
+            }
+        } 
+        catch(IOException ioe){
+    		ioe.printStackTrace();
+         }
+         finally {
+            is.close();
+            os.close();
+        }
+    }
+}
+	

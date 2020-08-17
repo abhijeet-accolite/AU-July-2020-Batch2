@@ -1,0 +1,301 @@
+
+
+1. String
+	Write a Java program to replace each substring of a given string that matches the given regular expression with the given replacement.
+	
+import java.util.*;
+public class Main
+{
+       public static void main(String[] args)
+    {
+        Scanner sc = new Scanner(System.in);
+        String str1 = sc.nextLine();
+
+        String old = sc.nextLine();
+        String nw = sc.nextLine();
+        String str2 = str.replaceAll(old, nw);
+       
+        System.out.println("Old string: " + str1);
+        System.out.println("New String: " + str2);
+    }
+
+}
+
+2. Collection
+	Write a Java program to get a reverse order view of the keys contained in a given map
+
+import java.util.*;
+import java.util.Map.Entry;  
+public class Main {  
+     public static void main(String args[]) {
+
+  // Create a tree map
+  TreeMap <Integer,String> tmap = new TreeMap <Integer,String> ();
+
+  // Put elements to the map 
+  tmap.put(1, "Delhi");
+  tmap.put(2, "Mumbai");
+  tmap.put(3, "Punjab");
+  tmap.put(4, "Haryana");
+
+  System.out.println("Orginal TreeMap content: " + tmap);
+  System.out.println("Reverse order view of the keys: " + tmap.descendingKeySet());
+ }
+}
+
+
+3 Exception
+	Write your own unchecked Exception and throw it from you counter programme which counts 1 to 100.When you get Prime no while counting then throw this Exception and catch this to print you exception message.
+import java.io.*;
+import java.util.*;
+
+class PrimeException extends RuntimeException {
+
+
+}
+public class Main
+{
+    public static void main(String[] args) throws IOException
+    {
+        int count=1;
+        try
+        {
+            while(count<=100)
+            {
+                if(checkPrime(count))
+                    throw new PrimeException();
+                count++;
+            }
+        }
+        catch (PrimeException e)
+        {
+            System.out.println("A prime Number is found");
+        }
+        
+    }
+    public static boolean checkPrime(int n){  
+    int i,m=0,flag=0;      
+    m=n/2;      
+    if(n==0||n==1){  
+        System.out.println(n+" is not prime number");
+        return false;
+        }
+    else{  
+        
+        for(i=2;i<=m;i++){      
+            if(n%i==0){      
+                System.out.println(n+" is not prime number");      
+                flag=1;
+                return false;
+        }      
+    }      
+    if(flag==0)  { System.out.println(n+" is prime number"); }  
+    }  
+    return true;
+    } 
+}
+
+4. Serialization
+	Write a programme to serialize 3 fields out of 5 and deserialize it. Use UUID to prvent object mutation.
+
+import java.io.*;
+import java.util.*;
+
+ public class Main {
+ 
+ public static void main(String[] args)
+ {
+ Employee object = new Employee("Abhijeet", 21, 110010, 01,800000);
+ String filename = "file.txt";
+ try {
+ FileOutputStream file = new FileOutputStream
+ (filename);
+ ObjectOutputStream out = new ObjectOutputStream
+ (file);
+ out.writeObject(object);
+ out.close();
+ file.close();
+ System.out.println("Object has been serialized\n"
+ + "Data before Deserialization.");
+ printdata(object);
+ object.Salary = 1000000;
+ }
+ catch (IOException ex) {
+ System.out.println("IOException is caught");
+ }
+ object = null;
+ try {
+ FileInputStream file = new FileInputStream
+ (filename);
+ ObjectInputStream in = new ObjectInputStream
+ (file);
+ object = (Employee) in.readObject();
+ in.close();
+ file.close();
+ System.out.println("Object has been deserialized\n"
+ + "Data after Deserialization.");
+ printdata(object);
+ }
+ catch (IOException ex) {
+ System.out.println("IOException is caught");
+ }
+ catch (ClassNotFoundException ex) {
+ System.out.println("ClassNotFoundException" +
+ " is caught");
+ }
+ }
+ public static void printdata(Employee object1)
+ {
+ System.out.println("name = " + object1.name);
+ System.out.println("age = " + object1.age);
+ System.out.println("Pin = " + object1.Pin);
+ System.out.println("Salary = " + object1.Salary);
+ System.out.println("Experience =" + object1.Experience);
+ }
+ }
+class Employee implements Serializable {
+ UUID serialversionUID = new UUID(100,10);
+ transient int Pin;
+ static int Salary;
+ transient int Experience;
+ String name;
+ int age;
+ public Employee(String name, int age, int Pin, int Salary,int Experience)
+ {
+ this.name = name;
+ this.age = age;
+ this.Pin = Pin;
+ this.Salary = Salary;
+ this.Experience=Experience;
+ }
+ }
+
+-------------------------------------------------------------------------------------------------------------------------------------------
+							Flag And Calculator
+-------------------------------------------------------------------------------------------------------------------------------------------
+Flag
+
+public class Main {
+ public static void main(String[] args) {
+  String p1 = "* * * * * * ==================================\n * * * * *  ==================================";
+  String p2 = "==============================================";
+  for (int i = 0; i < 4; i++) {
+   System.out.println(p1);
+  }
+  System.out.println("* * * * * * ==================================");
+  for (int i = 0; i < 6; i++) {
+   System.out.println(p2);
+  }
+ }
+}
+
+
+
+
+
+CalCulator
+
+import java.io.*;
+import java.util.*;
+public class Main
+{
+
+    public static int Calculator(String s)
+    {
+        char[] ch = s.toCharArray();
+        
+        int length = ch.length;
+         
+        Stack<Integer> operand = new Stack<Integer>(); 
+        Stack<Character> sign = new Stack<Character>(); 
+        
+
+  
+        for (int i = 0; i < length; i++) 
+        { 
+            if ((ch[i] == '+' || ch[i] == '-') && (i==0 || ch[i-1]=='+' || ch[i-1]=='-'))
+            operand.push(0);
+            if(ch[i]>='0' && ch[i]<='9')
+            { 
+                StringBuilder build=new StringBuilder();
+                while (i < length && ch[i] >= '0' && ch[i] <= '9') 
+                    build.append(ch[i++]);
+                    i--; 
+                operand.push(Integer.parseInt(build.toString())); 
+            } 
+  
+        
+            else if (ch[i] == '(') 
+               {
+                   sign.push(ch[i]); 
+               }
+  
+          
+            else if (ch[i] == ')') 
+            { 
+                while (sign.peek() != '(') 
+                  operand.push(putSign(sign.pop(), operand.pop(), operand.pop())); 
+                sign.pop(); 
+            } 
+  
+
+            else if (ch[i] == '+' || ch[i] == '-' || ch[i] == '*' || ch[i] == '/' || ch[i]=='%')
+            { 
+                while (!sign.isEmpty() && Precedence(ch[i], sign.peek())) 
+                 operand.push(putSign(sign.pop(), operand.pop(), operand.pop())); 
+                sign.push(ch[i]); 
+            } 
+        }
+        
+  
+        
+        while (!sign.isEmpty()) 
+            {
+                operand.push(putSign(sign.pop(), operand.pop(), operand.pop())); 
+            }
+  
+        
+        return operand.pop(); 
+    }
+    public static boolean Precedence(char op1, char op2) 
+    { 
+        if (op2 == '(' || op2 == ')') 
+            return false; 
+        if ((op1 == '%' || op1 == '*' || op1 == '/') && (op2 == '+' || op2 == '-')) 
+            return false; 
+        else
+            return true; 
+    } 
+    public static int putSign(char op, int b, int a) 
+    { 
+        switch (op) 
+        { 
+        case '+': 
+            return a + b; 
+        case '-': 
+            return a - b; 
+        case '*': 
+            return a * b; 
+        case '/': 
+            if (b == 0) 
+                throw new
+                UnsupportedOperationException("Cannot divide by zero"); 
+            return a / b; 
+        case '%':  
+            return a%b;
+        
+        } 
+        return 0; 
+    } 
+      public static void main(String[] args) throws IOException
+    {
+        
+        System.out.println("1. "+Main.Calculator("-5+8*6"));
+        System.out.println("2. "+Main.Calculator("(55+9)%9"));
+        System.out.println("3. "+Main.Calculator("(20+-3*5/8)"));
+        System.out.println("4. "+Main.Calculator("5+15/3*2-8%3"));
+
+        
+    }
+
+}
