@@ -1,0 +1,67 @@
+SQL Concepts & Fundamentals (13/08/2020)
+
+Note :
+
+> Assuming you are ready with an ER diagram for the Hospital Management System.
+> You can use any relational database (MySQL/Oracle/MS SQL Server) whichever you prefer.
+> Submission Dt: 17/08/2020
+
+Tasks :
+
+1. Create a database for the Hospital Management System based on your ER. Create appropriate tables & relationships.
+CREATE DATABASE HosptialManagementDb;
+USE HosptialManagementDb;
+CREATE TABLE EmployeeType(
+   ETypeId   INT              NOT NULL,
+   ETypyName VARCHAR(10)     NOT NULL,
+   PRIMARY KEY (ETypeId)
+);
+
+CREATE TABLE Employee(
+   EmployeeID   INT              NOT NULL,
+   ETypeId   INT              NOT NULL,
+   ENAME VARCHAR (50)     NOT NULL,
+   EAGE  INT              NOT NULL,
+   EADDRESS  VARCHAR (50) ,
+   ESALARY   INT,
+   DEPID INT,
+   PRIMARY KEY (EmployeeID)
+);
+
+CREATE TABLE HOSPITAL(
+   HID   INT              NOT NULL,
+   HNAME VARCHAR (50)     NOT NULL,
+   HADDRESS  VARCHAR (50) ,
+   PRIMARY KEY (HID)
+);
+CREATE TABLE PATIENT(
+   PID   INT              NOT NULL,
+   PNAME VARCHAR (50)     NOT NULL,
+   PAGE  INT              NOT NULL,
+   PGENDER VARCHAR(6),
+   PADDRESS  VARCHAR (50) ,
+   DID   INT,
+   DOA DATE,
+   DOD DATE,
+   PRIMARY KEY (PID)
+);
+
+CREATE TABLE DEPARTMENT(
+   DEPID   INT              NOT NULL,
+   DEPNAME VARCHAR (20)     NOT NULL,
+   PRIMARY KEY (DEPID)
+);
+
+
+
+
+2. Design a query to provide a list of doctors, which department they belong to and patients treated by them (if any).
+SELECT dbo.DEPARTMENT.DEPNAME, dbo.Employee.ENAME, dbo.PATIENT.PNAME
+FROM     dbo.DEPARTMENT INNER JOIN
+                  dbo.Employee ON dbo.DEPARTMENT.DEPID = dbo.Employee.DEPID CROSS JOIN
+                  dbo.PATIENT
+
+
+3. Query to provide the count of patients discharged per day in the last week. 
+select DOD,COUNT(PNAME) from  PATIENT where DOD BETWEEN '2020-08-07' and '2020-08-14' GROUP BY DOD;
+ 
