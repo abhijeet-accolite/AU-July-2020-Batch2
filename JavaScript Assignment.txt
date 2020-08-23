@@ -1,0 +1,133 @@
+1.)Array Methods
+
+a=['apple','mango','banana']
+b=['Orange','kiwi','melon']
+
+a.concat(b)
+//["apple", "mango", "banana", "Orange", "kiwi", "melon"]
+
+a.every((d) =>d.length>=5)
+//true
+
+a.filter((d) =>d.length>=6)
+//["apple", "banana"]
+
+a.forEach((d) =>{console.log("I love to have "+d+"s.");})
+//I love to have apples.
+//I love to have mangos.
+//I love to have bananas.
+
+a.indexOf("mango")
+//1
+
+a.join()
+//"apple,mango,banana"
+
+a.lastIndexOf("apple")
+//0
+
+a.map((d)=>d+" singh")
+//["apple singh", "mango singh", "banana singh"]
+
+a.pop()
+//"banana"
+
+//a = ["apple", "mango"]
+
+a.push("banana")
+//3
+
+
+//a = ["apple", "mango", "banana"]
+
+a.reduce((d,e)=>d+" "+e)
+//"apple mango banana"
+
+a.reduceRight((d,e)=>d+" "+e)
+//"banana mango apple"
+
+a.reverse()
+//["banana", "mango", "apple"]
+
+a.shift()
+//"banana"
+
+a.slice(0,1)
+//["mango"]
+//a = ["mango", "apple"]
+
+a=['apple','mango','banana']
+//["apple", "mango", "banana"]
+
+a.some((d)=>d.length==6)
+//true
+
+a.sort()
+//["apple", "banana", "mango"]
+
+a.splice(1,2)
+//["banana", "mango"]
+
+//a = ["apple"]
+
+b.toString()
+"Orange,kiwi,melon"
+
+b.unshift("kiwi")
+//4
+
+//b = ["kiwi", "Orange", "kiwi", "melon"]
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2.)String Methods
+
+strfun="Virus ki beti is Doctor"
+//"Virus ki beti is Doctor"
+
+strfun.split(" ")
+//["Virus", "ki", "beti", "is", "Doctor"]
+
+strfun.replace("beti","betian")
+//"Virus ki betian is Doctor"
+
+strfun.search("beti")
+//9
+
+strfun.search("betian")
+//-1
+
+strfun.match("beti")
+//["beti", index: 9, input: "Virus ki beti is Doctor", groups: undefined]
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3.)Difference between \n and \r?
+
+\n is the newline character 
+\r is the carriage return.
+
+In windows the \n means to begin a new line and \r states to begin from the currentline Whereas in Unix \n means the same as windows but \r has no such specific mean.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+4.)Take string input from user to perform two tests-
+A) It should start with "The/the" and end with "hello".
+B) Should consist of a word which has h(a,e,i,o,u)t 1 or zero times 
+and then should consist of any char once and should end with t.
+
+var str = prompt("Enter String");
+re1 = /[T,t]he.*hello$/
+re2 = /h[aeiou]?.t/
+console.log(re1.test(str))
+console.log(re2.test(str))
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+5.)Take 10,17,18,,14,15 sort its values in an array and filter elements >15 i.e 17,18
+b) print all the values and index of the values ==> 17,0 and 18,1
+c)map and multiply each element by 10 and print the final array i.e 170 & 180
+
+arr = [10,17,18,14,15]
+var flter = arr.filter((val)=> {return (val > 15)});
+flter.forEach((item)=>console.log(item,flter.indexOf(item)))
+var multiply = flter.map((val)=>{return(val*10)})
+console.log(multiply)
