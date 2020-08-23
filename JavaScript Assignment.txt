@@ -97,7 +97,7 @@ strfun.search("Daughter")
 strfun.search("beti")
 //-1
 
-strfun.match("beti")
+strfun.match("Daughter")
 //["Daughter", index: 8, input: "Virus's Daughter is Doctor", groups: undefined]
 
 
