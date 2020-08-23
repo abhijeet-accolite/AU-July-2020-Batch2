@@ -82,23 +82,24 @@ b.unshift("kiwi")
 
 2.)String Methods
 
-strfun="Virus ki beti is Doctor"
-//"Virus ki beti is Doctor"
+strfun="Virus's Daughter is Doctor"
+//"Virus's Daughter is Doctor"
 
 strfun.split(" ")
-//["Virus", "ki", "beti", "is", "Doctor"]
+//["Virus's", "Daughter", "is", "Doctor"]
 
-strfun.replace("beti","betian")
-//"Virus ki betian is Doctor"
+strfun.replace("Daughter","beti")
+//"Virus's beti is Doctor"
+
+strfun.search("Daughter")
+//8
 
 strfun.search("beti")
-//9
-
-strfun.search("betian")
 //-1
 
 strfun.match("beti")
-//["beti", index: 9, input: "Virus ki beti is Doctor", groups: undefined]
+//["Daughter", index: 8, input: "Virus's Daughter is Doctor", groups: undefined]
+
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
